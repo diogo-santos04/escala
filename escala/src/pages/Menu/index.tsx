@@ -18,25 +18,25 @@ export default function Menu() {
         { 
             id: 1, 
             title: "Unidades", 
-            icon: <MaterialIcons name="location-on" size={28} color="#3fffa3" />,
+            icon: <MaterialIcons name="location-on" size={28} color="#4361ee" />,
             screen: "Unidade" as ScreenKeyType
         },
         { 
             id: 2, 
             title: "Turnos", 
-            icon: <MaterialIcons name="access-time" size={28} color="#3fffa3" />,
+            icon: <MaterialIcons name="access-time" size={28} color="#4361ee" />,
             screen: "Turno" as ScreenKeyType
         },
         { 
             id: 3, 
             title: "Categorias", 
-            icon: <MaterialIcons name="category" size={28} color="#3fffa3" />,
+            icon: <MaterialIcons name="category" size={28} color="#4361ee" />,
             screen: "Categoria" as ScreenKeyType
         },
         { 
             id: 4, 
             title: "Servidores", 
-            icon: <FontAwesome5 name="user-md" size={28} color="#3fffa3" />,
+            icon: <FontAwesome5 name="user-md" size={28} color="#4361ee" />,
             screen: "Servidor" as ScreenKeyType
         }
     ];
@@ -47,14 +47,14 @@ export default function Menu() {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="light-content" backgroundColor="#101026" />
+            <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
             <View style={styles.container}>
-                <LinearGradient colors={["#1a1a40", "#16162a"]} style={styles.header}>
+                <LinearGradient colors={["#f8f9fa", "#e9ecef"]} style={styles.header}>
                     <TouchableOpacity style={styles.iconButton}>
-                        <Feather name="menu" size={24} color="#FFF" />
+                        <Feather name="menu" size={24} color="#495057" />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.iconButton} onPress={signOut}>
-                        <Feather name="log-out" size={24} color="#FFF" />
+                        <Feather name="log-out" size={24} color="#495057" />
                     </TouchableOpacity>
                 </LinearGradient>
 
@@ -74,7 +74,7 @@ export default function Menu() {
                             activeOpacity={0.7}
                         >
                             <LinearGradient 
-                                colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.05)']} 
+                                colors={['#ffffff', '#f8f9fa']} 
                                 style={styles.cardGradient}
                             >
                                 <View style={styles.iconContainer}>
@@ -88,8 +88,8 @@ export default function Menu() {
 
                 <View style={styles.bottomButtonContainer}>
                     <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate("Escala" as never)} activeOpacity={0.8}>
-                        <LinearGradient colors={["#3fffa3", "#38e696"]} style={styles.createButtonGradient}>
-                            <Feather name="plus" size={20} color="#101026" />
+                        <LinearGradient colors={["#4361ee", "#3f37c9"]} style={styles.createButtonGradient}>
+                            <Feather name="plus" size={20} color="#ffffff" />
                             <Text style={styles.createButtonText}>Montar nova escala</Text>
                         </LinearGradient>
                     </TouchableOpacity>
@@ -102,11 +102,11 @@ export default function Menu() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: "#101026",
+        backgroundColor: "#ffffff",
     },
     container: {
         flex: 1,
-        backgroundColor: "#101026",
+        backgroundColor: "#ffffff",
     },
     header: {
         flexDirection: "row",
@@ -116,27 +116,27 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
-        elevation: 8,
+        elevation: 4,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     iconButton: {
         padding: 8,
         borderRadius: 8,
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        backgroundColor: "rgba(0, 0, 0, 0.05)",
     },
     createButtonText: {
         marginLeft: 8,
         fontSize: 16,
         fontWeight: "bold",
-        color: "#101026",
+        color: "#ffffff",
     },
     bottomButtonContainer: {
         padding: 20,
         borderTopWidth: 1,
-        borderTopColor: "rgba(255, 255, 255, 0.05)",
+        borderTopColor: "rgba(0, 0, 0, 0.05)",
     },
     createButtonGradient: {
         flexDirection: "row",
@@ -163,13 +163,13 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         fontSize: 16,
-        color: "#9e9eb3",
+        color: "#6c757d",
         marginBottom: 8,
     },
     sectionTitle: {
         fontSize: 24,
         fontWeight: "bold",
-        color: "#FFF",
+        color: "#212529",
         marginBottom: 16,
     },
     cardContainer: {
@@ -185,6 +185,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius: 16,
         overflow: 'hidden',
+        elevation: 2,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
     },
     cardGradient: {
         flex: 1,
@@ -192,14 +197,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderColor: 'rgba(0, 0, 0, 0.05)',
         borderRadius: 16,
     },
     iconContainer: {
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: 'rgba(25, 25, 65, 0.9)',
+        backgroundColor: 'rgba(240, 240, 250, 0.9)',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 12,
@@ -207,7 +212,7 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#FFF',
+        color: '#212529',
         textAlign: 'center',
     }
 });

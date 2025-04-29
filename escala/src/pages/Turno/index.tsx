@@ -143,9 +143,6 @@ export default function Turno() {
                         onValueChange={handleCheckboxChange}
                         color={isChecked ? '#4630EB' : undefined}   
                     />
-                    <Text style={styles.checkboxLabel}>
-                        {isChecked ? 'Ativo' : 'Inativo'}
-                    </Text>
                 </View>
 
                 {editing ? (
@@ -185,7 +182,7 @@ export default function Turno() {
                                         item.status ? styles.statusActive : styles.statusInactive
                                     ]}>
                                         <Text style={styles.statusText}>
-                                            {item.status ? "Ativo" : "Inativo"}
+                                            {item.status ? "true" : "false"}
                                         </Text>
                                     </View>
                                 </Text>

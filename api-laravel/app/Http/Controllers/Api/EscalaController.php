@@ -57,6 +57,8 @@ class escalaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'unidade_id' => 'required',
+            'categoria_id' => 'required',
             'nome' => 'required',
             'status' => 'required',
         ]);
@@ -72,6 +74,8 @@ class escalaController extends Controller
         }
 
         $escala->update([
+            'unidade_id' => $request->input('unidade_id'),
+            'categoria_id' => $request->input('categoria_id'),
             'nome' => $request->input('nome'),
             'status' => $request->input('status'),
         ]);
