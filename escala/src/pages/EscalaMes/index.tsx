@@ -6,18 +6,20 @@ import { styles } from "./styles";
 import Checkbox from "expo-checkbox";
 import { ModalPicker } from "../../components/ModalPicker";
 
-interface Escala {
+interface EscalaMes {
     id: number | string;
     unidade_id: number;
-    categoria_id: number;
-    nome: string;
+    escala_id: number;
+    mes_ano: string;
+    inicio_selecao: Date;
     status: boolean;
 }
 
 interface FormData {
     unidade_id: number;
-    categoria_id: number;
-    nome: string;
+    escala_id: number;
+    mes_ano: string;
+    inicio_selecao: Date;
     status: boolean;
 }
 
@@ -27,14 +29,14 @@ type UnidadeProps = {
     status: boolean;
 };
 
-type CategoriaProps = {
+type EscalaProps = {
     id: number;
     nome: string;
     status: boolean;
 };
 
-export default function Servidor() {
-    const [escala, setEscala] = useState<Escala[]>([]);
+export default function EscalaMes() {
+    const [escalaMes, setEscalaMes] = useState<EscalaMes[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [editingId, setEditingId] = useState<string | number | null>(null);
@@ -43,24 +45,25 @@ export default function Servidor() {
     const [unidadeSelected, setUnidadeSelected] = useState<UnidadeProps | undefined>();
     const [modalUnidadeVisible, setModalUnidadeVisible] = useState(false);
 
-    const [categoria, setCategoria] = useState<CategoriaProps[]>([]);
-    const [categoriaSelected, setCategoriaSelected] = useState<CategoriaProps | undefined>();
-    const [modalCategoriaVisible, setModalCategoriaVisible] = useState(false);
+    const [escala, setEscala] = useState<EscalaProps[]>([]);
+    const [escalaSelected, setEscalaSelected] = useState<EscalaProps | undefined>();
+    const [modalEscalaVisible, setModalEscalaVisible] = useState(false);
 
     function handleChangeUnidade(item: UnidadeProps) {
         setUnidadeSelected(item);
         setFormData((prev) => ({ ...prev, unidade_id: item.id }));
     }
 
-    function handleChangeCategoria(item: CategoriaProps) {
-        setCategoriaSelected(item);
-        setFormData((prev) => ({ ...prev, categoria_id: item.id }));
+    function handleChangeEscala(item: EscalaProps) {
+        setEscalaSelected(item);
+        setFormData((prev) => ({ ...prev, escala_id: item.id }));
     }
 
     const [formData, setFormData] = useState<FormData>({
         unidade_id: 0,
-        categoria_id: 0,
-        nome: "",
+        escala_id: 0,
+        mes_ano: "",
+        inicio_selecao: new Date(),
         status: false,
     });
 
@@ -74,23 +77,29 @@ export default function Servidor() {
     };
 
     async function handleSubmit() {
-        if (!formData.nome || !formData.unidade_id || !formData.categoria_id) {
+        if (!formData.unidade_id || !formData.escala_id || !formData.mes_ano || !formData.inicio_selecao) {
             Alert.alert("Erro", "Preencha todos os campos");
             return;
         }
 
         setLoading(true);
         try {
-            const response = await api.post<Escala>("/escala", formData);
+            const response = await api.post<EscalaMes>("/escalames", formData);
             console.log("Submit response:", response.data);
 
-            setEscala([...escala, response.data]);
+            setEscalaMes([...escalaMes, response.data]);
 
-            setFormData({ unidade_id: 0, categoria_id: 0, nome: "", status: false });
+            setFormData({ 
+                unidade_id: 0, 
+                escala_id: 0, 
+                mes_ano: "", 
+                inicio_selecao: new Date(), 
+                status: false 
+            });
             setUnidadeSelected(undefined);
-            setCategoriaSelected(undefined);
+            setEscalaSelected(undefined);
 
-            fetchEscala();
+            fetchEscalaMes();
         } catch (e) {
             console.log("Submit error:", e);
             Alert.alert("Erro", "Não foi possível salvar os dados");
@@ -99,12 +108,12 @@ export default function Servidor() {
         }
     }
 
-    async function fetchEscala() {
+    async function fetchEscalaMes() {
         setLoading(true);
         try {
-            const response = await api.get<Escala[]>("/escala");
-            console.log("Fetched escalas:", response.data);
-            setEscala(response.data);
+            const response = await api.get<EscalaMes[]>("/escalames");
+            console.log("Fetched escalames:", response.data);
+            setEscalaMes(response.data);
         } catch (e) {
             console.log("Fetch error:", e);
         } finally {
@@ -112,45 +121,45 @@ export default function Servidor() {
         }
     }
 
-    async function handleDeleteEscala(id: string | number) {
+    async function handleDeleteEscalaMes(id: string | number) {
         try {
-            await api.delete(`/escala/${id}`);
-            setEscala(escala.filter((escala) => escala.id !== id));
+            await api.delete(`/escalames/${id}`);
+            setEscalaMes(escalaMes.filter((escalaMes) => escalaMes.id !== id));
         } catch (e) {
             console.log("Delete error:", e);
             Alert.alert("Erro", "Não foi possível excluir o item");
         }
     }
 
-    async function loadEditEscala(id: string | number) {
+    async function loadEditEscalaMes(id: string | number) {
         try {
             setEditing(true);
             setEditingId(id);
 
-            const response = await api.get(`/escala/${id}`);
+            const response = await api.get(`/escalames/${id}`);
             const data = response.data;
 
             const selectedUnidade = unidade.find((u) => u.id === data.unidade_id);
-            const selectedCategoria = categoria.find((c) => c.id === data.categoria_id);
+            const selectedEscala = escala.find((e) => e.id === data.escala_id);
 
             setFormData({
                 unidade_id: data.unidade_id,
-                categoria_id: data.categoria_id,
-                nome: data.nome,
+                escala_id: data.escala_id,
+                mes_ano: data.mes_ano,
+                inicio_selecao: new Date(data.inicio_selecao),
                 status: data.status,
             });
 
             setUnidadeSelected(selectedUnidade);
-            setCategoriaSelected(selectedCategoria);
-
+            setEscalaSelected(selectedEscala);
         } catch (e) {
             console.log("Load edit error:", e);
             Alert.alert("Erro", "Não foi possível carregar os dados para edição");
         }
     }
 
-    async function handleEditEscala() {
-        if (!formData.nome || !formData.unidade_id || !formData.categoria_id) {
+    async function handleEditEscalaMes() {
+        if (!formData.unidade_id || !formData.escala_id || !formData.mes_ano || !formData.inicio_selecao) {
             Alert.alert("Erro", "Preencha todos os campos");
             return;
         }
@@ -159,17 +168,23 @@ export default function Servidor() {
         try {
             console.log("Sending edit data:", formData);
             console.log("Editing ID:", editingId);
-            
-            const response = await api.put(`/escala/${editingId}`, formData);
+
+            const response = await api.put(`/escalames/${editingId}`, formData);
             console.log("Edit response:", response.data);
-            
+
             setEditing(false);
             setEditingId(null);
-            setFormData({ unidade_id: 0, categoria_id: 0, nome: "", status: false });
+            setFormData({ 
+                unidade_id: 0, 
+                escala_id: 0, 
+                mes_ano: "", 
+                inicio_selecao: new Date(), 
+                status: false 
+            });
             setUnidadeSelected(undefined);
-            setCategoriaSelected(undefined);
-            
-            fetchEscala();
+            setEscalaSelected(undefined);
+
+            fetchEscalaMes();
         } catch (e) {
             console.log("Edit error:", e);
             Alert.alert("Erro", "Não foi possível editar os dados");
@@ -189,63 +204,83 @@ export default function Servidor() {
             }
         }
 
-        async function fetchCategoria() {
+        async function fetchEscala() {
             try {
-                const response = await api.get("/categoria");
-                console.log("Fetched categorias:", response.data);
-                setCategoria(response.data);
+                const response = await api.get("/escala");
+                console.log("Fetched escalas:", response.data);
+                setEscala(response.data);
             } catch (error) {
-                console.log("Fetch categoria error:", error);
+                console.log("Fetch escala error:", error);
             }
         }
 
         fetchUnidade();
-        fetchCategoria();
         fetchEscala();
+        fetchEscalaMes();
     }, []);
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerText}>Gerenciamento de Escalas</Text>
+                <Text style={styles.headerText}>Gerenciamento de Escalas Mensais</Text>
             </View>
 
             <View style={styles.formContainer}>
-                <Text style={styles.formTitle}>{editing ? "Editar escala" : "Adicionar nova escala"}</Text>
+                <Text style={styles.formTitle}>{editing ? "Editar escala mensal" : "Adicionar nova escala mensal"}</Text>
 
                 <Modal transparent={true} visible={modalUnidadeVisible} animationType="fade">
                     <ModalPicker handleCloseModal={() => setModalUnidadeVisible(false)} options={unidade} selectedItem={handleChangeUnidade} title="Selecione uma unidade" labelKey="nome" />
                 </Modal>
 
-                <Modal transparent={true} visible={modalCategoriaVisible} animationType="fade">
-                    <ModalPicker handleCloseModal={() => setModalCategoriaVisible(false)} options={categoria} selectedItem={handleChangeCategoria} title="Selecione uma categoria" labelKey="nome" />
+                <Modal transparent={true} visible={modalEscalaVisible} animationType="fade">
+                    <ModalPicker handleCloseModal={() => setModalEscalaVisible(false)} options={escala} selectedItem={handleChangeEscala} title="Selecione uma escala" labelKey="nome" />
                 </Modal>
 
                 <Text style={styles.formLabel}>Unidade</Text>
                 <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setModalUnidadeVisible(true)}>
-                    <Text style={{ color: "#000000" }}>
-                        {unidadeSelected?.nome || "Selecione uma unidade"}
-                    </Text>
+                    <Text style={{ color: "#000000" }}>{unidadeSelected?.nome || "Selecione uma unidade"}</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.formLabel}>Categoria</Text>
-                <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setModalCategoriaVisible(true)}>
-                    <Text style={{ color: "#000000" }}>
-                        {categoriaSelected?.nome || "Selecione uma categoria"}
-                    </Text>
+                <Text style={styles.formLabel}>Escala</Text>
+                <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setModalEscalaVisible(true)}>
+                    <Text style={{ color: "#000000" }}>{escalaSelected?.nome || "Selecione uma escala"}</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.formLabel}>Nome</Text>
+                <Text style={styles.formLabel}>Mês/Ano</Text>
                 <TextInput
-                    placeholder="Digite o nome"
+                    placeholder="MM/AAAA"
                     placeholderTextColor="#000000"
                     style={styles.input}
-                    value={formData.nome}
+                    value={formData.mes_ano}
                     onChangeText={(text: string) => {
                         setFormData({
                             ...formData,
-                            nome: text,
+                            mes_ano: text,
                         });
+                    }}
+                />
+
+                <Text style={styles.formLabel}>Data Início da Seleção</Text>
+                <TextInput
+                    placeholder="DD/MM/AAAA"
+                    placeholderTextColor="#000000"
+                    style={styles.input}
+                    value={formData.inicio_selecao instanceof Date 
+                        ? formData.inicio_selecao.toLocaleDateString('pt-BR') 
+                        : ""}
+                    onChangeText={(text: string) => {
+                        const parts = text.split('/');
+                        if (parts.length === 3) {
+                            const day = parseInt(parts[0], 10);
+                            const month = parseInt(parts[1], 10) - 1; // JS months are 0-based
+                            const year = parseInt(parts[2], 10);
+                            const date = new Date(year, month, day);
+                            
+                            setFormData({
+                                ...formData,
+                                inicio_selecao: date,
+                            });
+                        }
                     }}
                 />
 
@@ -256,7 +291,7 @@ export default function Servidor() {
                 </View>
 
                 {editing ? (
-                    <TouchableOpacity style={styles.button} onPress={handleEditEscala} disabled={loading}>
+                    <TouchableOpacity style={styles.button} onPress={handleEditEscalaMes} disabled={loading}>
                         <Text style={styles.buttonText}>{loading ? "Carregando..." : "Editar"}</Text>
                     </TouchableOpacity>
                 ) : (
@@ -271,9 +306,15 @@ export default function Servidor() {
                         onPress={() => {
                             setEditing(false);
                             setEditingId(null);
-                            setFormData({ unidade_id: 0, categoria_id: 0, nome: "", status: false });
+                            setFormData({ 
+                                unidade_id: 0, 
+                                escala_id: 0, 
+                                mes_ano: "", 
+                                inicio_selecao: new Date(), 
+                                status: false 
+                            });
                             setUnidadeSelected(undefined);
-                            setCategoriaSelected(undefined);
+                            setEscalaSelected(undefined);
                         }}
                     >
                         <Text style={styles.buttonText}>Cancelar</Text>
@@ -282,13 +323,14 @@ export default function Servidor() {
             </View>
 
             <View style={styles.tableContainer}>
-                <Text style={styles.tableTitle}>Escalas cadastradas</Text>
+                <Text style={styles.tableTitle}>Escalas Mensais cadastradas</Text>
 
                 <View style={styles.tableHeader}>
                     <Text style={[styles.tableHeaderText, { flex: 0.5 }]}>ID</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Nome</Text>
                     <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Unidade</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Categoria</Text>
+                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Escala</Text>
+                    <Text style={[styles.tableHeaderText, { flex: 1 }]}>Mês/Ano</Text>
+                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Início Seleção</Text>
                     <Text style={[styles.tableHeaderText, { flex: 0.8 }]}>Status</Text>
                     <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Ações</Text>
                 </View>
@@ -296,29 +338,35 @@ export default function Servidor() {
                 <ScrollView style={styles.tableContent}>
                     {loading ? (
                         <Text style={styles.loadingText}>Carregando...</Text>
-                    ) : escala.length === 0 ? (
-                        <Text style={styles.emptyText}>Nenhuma escala cadastrada</Text>
+                    ) : escalaMes.length === 0 ? (
+                        <Text style={styles.emptyText}>Nenhuma escala mensal cadastrada</Text>
                     ) : (
-                        escala.map((item) => {
+                        escalaMes.map((item) => {
                             const itemUnidade = unidade.find((u) => u.id === item.unidade_id);
-                            const itemCategoria = categoria.find((c) => c.id === item.categoria_id);
+                            const itemEscala = escala.find((e) => e.id === item.escala_id);
+                            
+                            // Format the date for display
+                            const inicioSelecao = item.inicio_selecao instanceof Date 
+                                ? item.inicio_selecao.toLocaleDateString('pt-BR')
+                                : new Date(item.inicio_selecao).toLocaleDateString('pt-BR');
 
                             return (
                                 <View key={String(item.id)} style={styles.tableRow}>
                                     <Text style={[styles.tableCell, { flex: 0.5 }]}>{item.id}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{item.nome}</Text>
                                     <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemUnidade?.nome || item.unidade_id}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemCategoria?.nome || item.categoria_id}</Text>
+                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemEscala?.nome || item.escala_id}</Text>
+                                    <Text style={[styles.tableCell, { flex: 1 }]}>{item.mes_ano}</Text>
+                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{inicioSelecao}</Text>
                                     <Text style={[styles.tableCell, { flex: 0.8 }]}>
                                         <View style={[styles.statusBadge, item.status ? styles.statusActive : styles.statusInactive]}>
                                             <Text style={styles.statusText}>{item.status ? "Ativo" : "Inativo"}</Text>
                                         </View>
                                     </Text>
                                     <View style={[{ flex: 1.5, flexDirection: "row", justifyContent: "space-between" }]}>
-                                        <TouchableOpacity style={styles.editButton} onPress={() => loadEditEscala(item.id)}>
+                                        <TouchableOpacity style={styles.editButton} onPress={() => loadEditEscalaMes(item.id)}>
                                             <Text style={styles.editButtonText}>Editar</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEscala(item.id)}>
+                                        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEscalaMes(item.id)}>
                                             <Text style={styles.deleteButtonText}>Excluir</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -328,7 +376,7 @@ export default function Servidor() {
                     )}
                 </ScrollView>
 
-                <TouchableOpacity style={styles.refreshButton} onPress={fetchEscala} disabled={loading}>
+                <TouchableOpacity style={styles.refreshButton} onPress={fetchEscalaMes} disabled={loading}>
                     <Text style={styles.refreshButtonText}>{loading ? "Carregando..." : "Atualizar Lista"}</Text>
                 </TouchableOpacity>
             </View>

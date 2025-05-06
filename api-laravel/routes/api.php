@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\TurnoController;
 use App\Http\Controllers\Api\ServidorController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\EscalaController;
+use App\Http\Controllers\Api\EscalaMesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/teste", function(){
@@ -29,4 +30,6 @@ Route::resource('/servidor', ServidorController::class);
 Route::resource('/categoria', CategoriaController::class);
 //ROTA ESCALA
 Route::resource('/escala', EscalaController::class);
+//ROTA ESCAL MES
+Route::resource('/escalaMes', EscalaMesController::class);
 

@@ -38,6 +38,12 @@ export default function Menu() {
             title: "Servidores", 
             icon: <FontAwesome5 name="user-md" size={28} color="#4361ee" />,
             screen: "Servidor" as ScreenKeyType
+        },
+        { 
+            id: 5, 
+            title: "Escala Mes", 
+            icon: <FontAwesome5 name="user-md" size={28} color="#4361ee" />,
+            screen: "EscalaMes" as ScreenKeyType
         }
     ];
 

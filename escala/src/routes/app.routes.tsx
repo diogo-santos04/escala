@@ -6,6 +6,7 @@ import Turno from "../pages/Turno";
 import Servidor from "../pages/Servidor";
 import Categoria from "../pages/Categoria";
 import Escala from "../pages/Escala";
+import EscalaMes from "../pages/EscalaMes";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export type StackParamsList = {
     Servidor: undefined;
     Categoria: undefined;
     Escala: undefined;
+    EscalaMes: undefined;
 };
 
 function AppRoutes() {
@@ -49,6 +51,11 @@ function AppRoutes() {
             <Stack.Screen
                 name="Escala"
                 component={Escala}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="EscalaMes"
+                component={EscalaMes}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
