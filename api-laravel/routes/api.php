@@ -31,5 +31,5 @@ Route::resource('/categoria', CategoriaController::class);
 //ROTA ESCALA
 Route::resource('/escala', EscalaController::class);
 //ROTA ESCAL MES
-Route::resource('/escalaMes', EscalaMesController::class);
+Route::resource('/escala_mes', EscalaMesController::class);
 

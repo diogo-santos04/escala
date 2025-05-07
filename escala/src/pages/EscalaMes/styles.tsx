@@ -180,8 +180,9 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginBottom: 16,
-        marginTop: -10,
-    },
+        marginTop: 8,
+        marginLeft: 5,
+      },
     checkboxLabel: {
         fontSize: 16,
         color: "#333",
@@ -206,9 +207,10 @@ export const styles = StyleSheet.create({
     },
     formLabel: {
         fontSize: 14,
-        color: "#F8F9FA",
-        marginBottom: 8,
-        marginTop: 12,
+        color: "#0000000",
+        // marginBottom: 8,
+        // marginTop: 12,
+        padding: 6
     },
 
     smallColumn: {

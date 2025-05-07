@@ -5,26 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\EscalaMes;
+use App\Models\EscalaSetor;
 
-class EscalaMesController extends Controller
+class EscalaSetorController extends Controller
 {
     // GET /item
     public function index()
     {
-        return response()->json(EscalaMes::all());
+        return response()->json(EscalaSetor::all());
     }
 
     // POST /item
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'unidade_id' => 'required',
             'escala_id' => 'required',
-            'mes_ano' => 'required',
-            'inicio_selecao' => 'required',
-            'publicidade' => 'required',
-            'configuracao' => 'required',
+            'nome' => 'required',
             'status' => 'required',
         ]);
 
@@ -34,14 +30,9 @@ class EscalaMesController extends Controller
             return response()->json(['error' => 'Dados incorretos'], 400);
         }
 
-        $escala = EscalaMes::create([
-            'unidade_id' => $request->input('unidade_id'),
+        $escala = EscalaSetor::create([
             'escala_id' => $request->input('escala_id'),
-            'mes_ano' => $request->input('mes_ano'),
-            'inicio_selecao' => $request->input('inicio_selecao'),
-            'publicidade' => $request->input('publicidade'),
-            'configuracao' => $request->input('configuracao'),
-
+            'nome' => $request->input('nome'),
             'status' => $request->input('status'),
         ]);
 
@@ -51,7 +42,7 @@ class EscalaMesController extends Controller
     // GET /item/{id}
     public function show($id)
     {
-        $escala = EscalaMes::find($id);
+        $escala = EscalaSetor::find($id);
 
         if (!$escala) {
             return response()->json(['error' => 'Item não encontrado'], 404);
@@ -64,12 +55,8 @@ class EscalaMesController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'unidade_id' => 'required',
             'escala_id' => 'required',
-            'mes_ano' => 'required',
-            'inicio_selecao' => 'required',
-            'publicidade' => 'required',
-            'configuracao' => 'required',
+            'nome' => 'required',
             'status' => 'required',
         ]);
 
@@ -77,19 +64,15 @@ class EscalaMesController extends Controller
             return response()->json(['error' => 'Dados inválidos'], 400);
         }
 
-        $escala = EscalaMes::find($id);
+        $escala = EscalaSetor::find($id);
 
         if (!$escala) {
             return response()->json(['error' => 'Item não encontrado'], 404);
         }
 
         $escala->update([
-            'unidade_id' => $request->input('unidade_id'),
             'escala_id' => $request->input('escala_id'),
-            'mes_ano' => $request->input('mes_ano'),
-            'inicio_selecao' => $request->input('inicio_selecao'),
-            'publicidade' => $request->input('publicidade'),
-            'configuracao' => $request->input('configuracao'),
+            'nome' => $request->input('nome'),
             'status' => $request->input('status'),
         ]);
 
@@ -99,7 +82,7 @@ class EscalaMesController extends Controller
     // DELETE /item/{id}
     public function destroy($id)
     {
-        $escala = EscalaMes::find($id);
+        $escala = EscalaSetor::find($id);
 
         if (!$escala) {
             return response()->json(['error' => 'escala não encontrado'], 404);

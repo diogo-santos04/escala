@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView, Alert, Modal } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView, Alert, Modal, Platform } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
 import { styles } from "./styles";
 import Checkbox from "expo-checkbox";
 import { ModalPicker } from "../../components/ModalPicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 interface EscalaMes {
     id: number | string;
@@ -12,6 +13,8 @@ interface EscalaMes {
     escala_id: number;
     mes_ano: string;
     inicio_selecao: Date;
+    publicidade: boolean;
+    configuracao: boolean;
     status: boolean;
 }
 
@@ -20,6 +23,8 @@ interface FormData {
     escala_id: number;
     mes_ano: string;
     inicio_selecao: Date;
+    publicidade: boolean;
+    configuracao: boolean;
     status: boolean;
 }
 
@@ -49,6 +54,8 @@ export default function EscalaMes() {
     const [escalaSelected, setEscalaSelected] = useState<EscalaProps | undefined>();
     const [modalEscalaVisible, setModalEscalaVisible] = useState(false);
 
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
     function handleChangeUnidade(item: UnidadeProps) {
         setUnidadeSelected(item);
         setFormData((prev) => ({ ...prev, unidade_id: item.id }));
@@ -64,17 +71,10 @@ export default function EscalaMes() {
         escala_id: 0,
         mes_ano: "",
         inicio_selecao: new Date(),
+        publicidade: false,
+        configuracao: false,
         status: false,
     });
-
-    const isChecked = formData.status;
-
-    const handleCheckboxChange = (checked: boolean) => {
-        setFormData({
-            ...formData,
-            status: checked,
-        });
-    };
 
     async function handleSubmit() {
         if (!formData.unidade_id || !formData.escala_id || !formData.mes_ano || !formData.inicio_selecao) {
@@ -84,17 +84,19 @@ export default function EscalaMes() {
 
         setLoading(true);
         try {
-            const response = await api.post<EscalaMes>("/escalames", formData);
+            const response = await api.post<EscalaMes>("/escala_mes", formData);
             console.log("Submit response:", response.data);
 
             setEscalaMes([...escalaMes, response.data]);
 
-            setFormData({ 
-                unidade_id: 0, 
-                escala_id: 0, 
-                mes_ano: "", 
-                inicio_selecao: new Date(), 
-                status: false 
+            setFormData({
+                unidade_id: 0,
+                escala_id: 0,
+                mes_ano: "",
+                inicio_selecao: new Date(),
+                publicidade: false,
+                configuracao: false,
+                status: false,
             });
             setUnidadeSelected(undefined);
             setEscalaSelected(undefined);
@@ -102,7 +104,6 @@ export default function EscalaMes() {
             fetchEscalaMes();
         } catch (e) {
             console.log("Submit error:", e);
-            Alert.alert("Erro", "Não foi possível salvar os dados");
         } finally {
             setLoading(false);
         }
@@ -111,7 +112,7 @@ export default function EscalaMes() {
     async function fetchEscalaMes() {
         setLoading(true);
         try {
-            const response = await api.get<EscalaMes[]>("/escalames");
+            const response = await api.get<EscalaMes[]>("/escala_mes");
             console.log("Fetched escalames:", response.data);
             setEscalaMes(response.data);
         } catch (e) {
@@ -136,7 +137,7 @@ export default function EscalaMes() {
             setEditing(true);
             setEditingId(id);
 
-            const response = await api.get(`/escalames/${id}`);
+            const response = await api.get(`/escala_mes/${id}`);
             const data = response.data;
 
             const selectedUnidade = unidade.find((u) => u.id === data.unidade_id);
@@ -147,6 +148,8 @@ export default function EscalaMes() {
                 escala_id: data.escala_id,
                 mes_ano: data.mes_ano,
                 inicio_selecao: new Date(data.inicio_selecao),
+                publicidade: data.publicidade,
+                configuracao: data.configuracao,
                 status: data.status,
             });
 
@@ -169,17 +172,19 @@ export default function EscalaMes() {
             console.log("Sending edit data:", formData);
             console.log("Editing ID:", editingId);
 
-            const response = await api.put(`/escalames/${editingId}`, formData);
+            const response = await api.put(`/escala_mes/${editingId}`, formData);
             console.log("Edit response:", response.data);
 
             setEditing(false);
             setEditingId(null);
-            setFormData({ 
-                unidade_id: 0, 
-                escala_id: 0, 
-                mes_ano: "", 
-                inicio_selecao: new Date(), 
-                status: false 
+            setFormData({
+                unidade_id: 0,
+                escala_id: 0,
+                mes_ano: "",
+                inicio_selecao: new Date(),
+                publicidade: false,
+                configuracao: false,
+                status: false,
             });
             setUnidadeSelected(undefined);
             setEscalaSelected(undefined);
@@ -261,33 +266,54 @@ export default function EscalaMes() {
                 />
 
                 <Text style={styles.formLabel}>Data Início da Seleção</Text>
-                <TextInput
-                    placeholder="DD/MM/AAAA"
-                    placeholderTextColor="#000000"
-                    style={styles.input}
-                    value={formData.inicio_selecao instanceof Date 
-                        ? formData.inicio_selecao.toLocaleDateString('pt-BR') 
-                        : ""}
-                    onChangeText={(text: string) => {
-                        const parts = text.split('/');
-                        if (parts.length === 3) {
-                            const day = parseInt(parts[0], 10);
-                            const month = parseInt(parts[1], 10) - 1; // JS months are 0-based
-                            const year = parseInt(parts[2], 10);
-                            const date = new Date(year, month, day);
-                            
-                            setFormData({
-                                ...formData,
-                                inicio_selecao: date,
-                            });
-                        }
-                    }}
-                />
+                <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
+                    <Text style={{ fontSize: 15, marginTop: 8 }}> {formData.inicio_selecao ? formData.inicio_selecao.toLocaleString() : "Selecione a data"}</Text>
+                </TouchableOpacity>
 
-                <Text style={styles.formLabel}>Status</Text>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={formData.inicio_selecao || new Date()}
+                        mode="date"
+                        onChange={(event, selectedDate) => {
+                            setShowDatePicker(false);
+                            if (selectedDate) {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    inicio_selecao: selectedDate,
+                                }));
+                            }
+                        }}
+                        display={Platform.OS === "ios" ? "spinner" : "default"}
+                    />
+                )}
+
                 <View style={styles.checkboxContainer}>
-                    <Checkbox style={styles.checkbox} value={isChecked} onValueChange={handleCheckboxChange} color={isChecked ? "#3fffa3" : undefined} />
-                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{isChecked ? "Ativo" : "Inativo"}</Text>
+                    <Text style={styles.formLabel}>Publicidade</Text>
+                    <Checkbox
+                        style={styles.checkbox}
+                        value={formData.publicidade}
+                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, publicidade: bool }))}
+                        color={formData.publicidade ? "#3fffa3" : undefined}
+                    />
+                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.publicidade ? "Ativo" : "Inativo"}</Text>
+
+                    <Text style={styles.formLabel}>Configuração</Text>
+                    <Checkbox
+                        style={styles.checkbox}
+                        value={formData.configuracao}
+                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, configuracao: bool }))}
+                        color={formData.configuracao ? "#3fffa3" : undefined}
+                    />
+                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.configuracao ? "Ativo" : "Inativo"}</Text>
+
+                    <Text style={styles.formLabel}>Status</Text>
+                    <Checkbox
+                        style={styles.checkbox}
+                        value={formData.status}
+                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, status: bool }))}
+                        color={formData.status ? "#3fffa3" : undefined}
+                    />
+                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.status ? "Ativo" : "Inativo"}</Text>
                 </View>
 
                 {editing ? (
@@ -306,12 +332,14 @@ export default function EscalaMes() {
                         onPress={() => {
                             setEditing(false);
                             setEditingId(null);
-                            setFormData({ 
-                                unidade_id: 0, 
-                                escala_id: 0, 
-                                mes_ano: "", 
-                                inicio_selecao: new Date(), 
-                                status: false 
+                            setFormData({
+                                unidade_id: 0,
+                                escala_id: 0,
+                                mes_ano: "",
+                                inicio_selecao: new Date(),
+                                publicidade: false,
+                                configuracao: false,
+                                status: false,
                             });
                             setUnidadeSelected(undefined);
                             setEscalaSelected(undefined);
@@ -344,11 +372,8 @@ export default function EscalaMes() {
                         escalaMes.map((item) => {
                             const itemUnidade = unidade.find((u) => u.id === item.unidade_id);
                             const itemEscala = escala.find((e) => e.id === item.escala_id);
-                            
-                            // Format the date for display
-                            const inicioSelecao = item.inicio_selecao instanceof Date 
-                                ? item.inicio_selecao.toLocaleDateString('pt-BR')
-                                : new Date(item.inicio_selecao).toLocaleDateString('pt-BR');
+
+                            const inicioSelecao = item.inicio_selecao instanceof Date ? item.inicio_selecao.toLocaleDateString("pt-BR") : new Date(item.inicio_selecao).toLocaleDateString("pt-BR");
 
                             return (
                                 <View key={String(item.id)} style={styles.tableRow}>
