@@ -8,6 +8,12 @@ use App\Http\Controllers\Api\ServidorController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\EscalaController;
 use App\Http\Controllers\Api\EscalaMesController;
+use App\Http\Controllers\Api\EscalaServidorController;
+use App\Http\Controllers\Api\EscalaSetorController;
+use App\Http\Controllers\Api\EscalaTurnoController;
+use App\Http\Controllers\Api\EscalaLimiteController;
+use App\Http\Controllers\Api\FeriadoController;
+use App\Http\Controllers\Api\PlantaoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/teste", function(){
@@ -32,4 +38,18 @@ Route::resource('/categoria', CategoriaController::class);
 Route::resource('/escala', EscalaController::class);
 //ROTA ESCAL MES
 Route::resource('/escala_mes', EscalaMesController::class);
+//ROTA ESCALA SERVIDOR
+Route::resource('/escala_servidor', EscalaServidorController::class);
+//ROTA ESCALA SETOR
+Route::resource('/escala_setor', EscalaSetorController::class);
+//ROTA ESCALA TURNO
+Route::resource('/escala_turno', EscalaTurnoController::class);
+//ROTA ESCALA LIMIITE
+Route::resource('/escala_limite', EscalaLimiteController::class);
+//ROTA FERIADO
+Route::resource('/feriado', FeriadoController::class);
+//ROTA ESCALA PLANTAO
+Route::resource('/escala_setor', PlantaoController::class);
+
+
 

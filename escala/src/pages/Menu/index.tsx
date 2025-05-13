@@ -42,8 +42,14 @@ export default function Menu() {
         { 
             id: 5, 
             title: "Escala Mes", 
-            icon: <FontAwesome5 name="user-md" size={28} color="#4361ee" />,
+            icon: <FontAwesome5 name="calendar" size={28} color="#4361ee" />,
             screen: "EscalaMes" as ScreenKeyType
+        },
+        { 
+            id: 6, 
+            title: "Escala Setor", 
+            icon: <FontAwesome5 name="building" size={28} color="#4361ee" />,
+            screen: "EscalaSetor" as ScreenKeyType
         }
     ];
 
@@ -80,7 +86,7 @@ export default function Menu() {
                             activeOpacity={0.7}
                         >
                             <LinearGradient 
-                                colors={['#ffffff', '#f8f9fa']} 
+                                colors={['#e9ecef', '#f8f9fa']} 
                                 style={styles.cardGradient}
                             >
                                 <View style={styles.iconContainer}>

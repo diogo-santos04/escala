@@ -7,6 +7,7 @@ import Servidor from "../pages/Servidor";
 import Categoria from "../pages/Categoria";
 import Escala from "../pages/Escala";
 import EscalaMes from "../pages/EscalaMes";
+import EscalaSetor from "../pages/EscalaSetor";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export type StackParamsList = {
     Categoria: undefined;
     Escala: undefined;
     EscalaMes: undefined;
+    EscalaSetor: undefined;
 };
 
 function AppRoutes() {
@@ -56,6 +58,12 @@ function AppRoutes() {
             <Stack.Screen
                 name="EscalaMes"
                 component={EscalaMes}
+                options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+                name="EscalaSetor"
+                component={EscalaSetor}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
