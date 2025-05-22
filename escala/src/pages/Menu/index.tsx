@@ -50,7 +50,37 @@ export default function Menu() {
             title: "Escala Setor", 
             icon: <FontAwesome5 name="building" size={28} color="#4361ee" />,
             screen: "EscalaSetor" as ScreenKeyType
-        }
+        },
+        { 
+            id: 7, 
+            title: "Escala Turno", 
+            icon: <FontAwesome5 name="clock" size={28} color="#4361ee" />,
+            screen: "EscalaTurno" as ScreenKeyType
+        },
+        { 
+            id: 8, 
+            title: "Feriado", 
+            icon: <FontAwesome5 name="clock" size={28} color="#4361ee" />,
+            screen: "Feriado" as ScreenKeyType
+        },
+        { 
+            id: 9, 
+            title: "Escala Limite", 
+            icon: <FontAwesome5 name="clock" size={28} color="#4361ee" />,
+            screen: "EscalaLimite" as ScreenKeyType
+        },
+        { 
+            id: 10, 
+            title: "Plantao", 
+            icon: <FontAwesome5 name="clock" size={28} color="#4361ee" />,
+            screen: "Plantao" as ScreenKeyType
+        },
+        // { 
+        //     id: 11, 
+        //     title: "Teste", 
+        //     icon: <FontAwesome5 name="clock" size={28} color="#4361ee" />,
+        //     screen: "Teste" as ScreenKeyType
+        // }
     ];
 
     const navigateToScreen = (screen: ScreenKeyType) => {

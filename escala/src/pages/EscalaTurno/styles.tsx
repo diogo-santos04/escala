@@ -113,10 +113,7 @@ export const styles = StyleSheet.create({
     },
     tableCell: {
         color: "#333",
-        paddingHorizontal: 6, // adiciona espaço entre colunas
-        textAlign: "left",
     },
-
     idColumn: {
         flex: 0.5,
     },
@@ -180,13 +177,12 @@ export const styles = StyleSheet.create({
         marginRight: 10,
     },
     checkboxContainer: {
-        flexDirection: "column",
-        alignItems: "flex-start",
+        flexDirection: "row",
+        alignItems: "center",
         marginBottom: 16,
         marginTop: 8,
         marginLeft: 5,
-    },
-
+      },
     checkboxLabel: {
         fontSize: 16,
         color: "#333",
@@ -214,7 +210,7 @@ export const styles = StyleSheet.create({
         color: "#0000000",
         // marginBottom: 8,
         // marginTop: 12,
-        padding: 6,
+        padding: 6
     },
 
     smallColumn: {

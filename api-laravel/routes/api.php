@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\EscalaTurnoController;
 use App\Http\Controllers\Api\EscalaLimiteController;
 use App\Http\Controllers\Api\FeriadoController;
 use App\Http\Controllers\Api\PlantaoController;
+use App\Http\Controllers\Api\ViewEscalaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("/teste", function(){
@@ -48,8 +49,10 @@ Route::resource('/escala_turno', EscalaTurnoController::class);
 Route::resource('/escala_limite', EscalaLimiteController::class);
 //ROTA FERIADO
 Route::resource('/feriado', FeriadoController::class);
-//ROTA ESCALA PLANTAO
-Route::resource('/escala_setor', PlantaoController::class);
+//ROTA PLANTAO
+Route::resource('/plantao', PlantaoController::class);
+
+Route::resource('/view_escala', ViewEscalaController::class);
 
 
 

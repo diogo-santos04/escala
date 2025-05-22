@@ -287,33 +287,39 @@ export default function EscalaMes() {
                     />
                 )}
 
-                <View style={styles.checkboxContainer}>
-                    <Text style={styles.formLabel}>Publicidade</Text>
-                    <Checkbox
-                        style={styles.checkbox}
-                        value={formData.publicidade}
-                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, publicidade: bool }))}
-                        color={formData.publicidade ? "#3fffa3" : undefined}
-                    />
-                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.publicidade ? "Ativo" : "Inativo"}</Text>
+                <View style={{ marginBottom: 16, marginTop: 8, marginLeft: 5 }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>
+                        <Text style={styles.formLabel}>Publicidade</Text>
+                        <Checkbox
+                            style={styles.checkbox}
+                            value={formData.publicidade}
+                            onValueChange={(bool) => setFormData((prev) => ({ ...prev, publicidade: bool }))}
+                            color={formData.publicidade ? "#3fffa3" : undefined}
+                        />
+                        <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.publicidade ? "Ativo" : "Inativo"}</Text>
+                    </View>
 
-                    <Text style={styles.formLabel}>Configuração</Text>
-                    <Checkbox
-                        style={styles.checkbox}
-                        value={formData.configuracao}
-                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, configuracao: bool }))}
-                        color={formData.configuracao ? "#3fffa3" : undefined}
-                    />
-                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.configuracao ? "Ativo" : "Inativo"}</Text>
+                    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>
+                        <Text style={styles.formLabel}>Configuração</Text>
+                        <Checkbox
+                            style={styles.checkbox}
+                            value={formData.configuracao}
+                            onValueChange={(bool) => setFormData((prev) => ({ ...prev, configuracao: bool }))}
+                            color={formData.configuracao ? "#3fffa3" : undefined}
+                        />
+                        <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.configuracao ? "Ativo" : "Inativo"}</Text>
+                    </View>
 
-                    <Text style={styles.formLabel}>Status</Text>
-                    <Checkbox
-                        style={styles.checkbox}
-                        value={formData.status}
-                        onValueChange={(bool) => setFormData((prev) => ({ ...prev, status: bool }))}
-                        color={formData.status ? "#3fffa3" : undefined}
-                    />
-                    <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.status ? "Ativo" : "Inativo"}</Text>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={styles.formLabel}>Status</Text>
+                        <Checkbox
+                            style={styles.checkbox}
+                            value={formData.status}
+                            onValueChange={(bool) => setFormData((prev) => ({ ...prev, status: bool }))}
+                            color={formData.status ? "#3fffa3" : undefined}
+                        />
+                        <Text style={{ color: "#FFF", marginLeft: 8 }}>{formData.status ? "Ativo" : "Inativo"}</Text>
+                    </View>
                 </View>
 
                 {editing ? (
@@ -353,52 +359,59 @@ export default function EscalaMes() {
             <View style={styles.tableContainer}>
                 <Text style={styles.tableTitle}>Escalas Mensais cadastradas</Text>
 
-                <View style={styles.tableHeader}>
-                    <Text style={[styles.tableHeaderText, { flex: 0.5 }]}>ID</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Unidade</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Escala</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1 }]}>Mês/Ano</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Início Seleção</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 0.8 }]}>Status</Text>
-                    <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Ações</Text>
-                </View>
+                <ScrollView horizontal>
+                    <View>
+                        {/* Cabeçalho */}
+                        <View style={styles.tableHeader}>
+                            <Text style={[styles.tableHeaderText, { flex: 0.5 }]}>ID</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Unidade</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Escala</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 1 }]}>Mês/Ano</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Início Seleção</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 0.8 }]}>Status</Text>
+                            <Text style={[styles.tableHeaderText, { flex: 1.5 }]}>Ações</Text>
+                        </View>
 
-                <ScrollView style={styles.tableContent}>
-                    {loading ? (
-                        <Text style={styles.loadingText}>Carregando...</Text>
-                    ) : escalaMes.length === 0 ? (
-                        <Text style={styles.emptyText}>Nenhuma escala mensal cadastrada</Text>
-                    ) : (
-                        escalaMes.map((item) => {
-                            const itemUnidade = unidade.find((u) => u.id === item.unidade_id);
-                            const itemEscala = escala.find((e) => e.id === item.escala_id);
+                        {/* Conteúdo */}
+                        <ScrollView style={{ maxHeight: 400 }}>
+                            {loading ? (
+                                <Text style={styles.loadingText}>Carregando...</Text>
+                            ) : escalaMes.length === 0 ? (
+                                <Text style={styles.emptyText}>Nenhuma escala mensal cadastrada</Text>
+                            ) : (
+                                escalaMes.map((item) => {
+                                    const itemUnidade = unidade.find((u) => u.id === item.unidade_id);
+                                    const itemEscala = escala.find((e) => e.id === item.escala_id);
 
-                            const inicioSelecao = item.inicio_selecao instanceof Date ? item.inicio_selecao.toLocaleDateString("pt-BR") : new Date(item.inicio_selecao).toLocaleDateString("pt-BR");
+                                    const inicioSelecao =
+                                        item.inicio_selecao instanceof Date ? item.inicio_selecao.toLocaleDateString("pt-BR") : new Date(item.inicio_selecao).toLocaleDateString("pt-BR");
 
-                            return (
-                                <View key={String(item.id)} style={styles.tableRow}>
-                                    <Text style={[styles.tableCell, { flex: 0.5 }]}>{item.id}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemUnidade?.nome || item.unidade_id}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemEscala?.nome || item.escala_id}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1 }]}>{item.mes_ano}</Text>
-                                    <Text style={[styles.tableCell, { flex: 1.5 }]}>{inicioSelecao}</Text>
-                                    <Text style={[styles.tableCell, { flex: 0.8 }]}>
-                                        <View style={[styles.statusBadge, item.status ? styles.statusActive : styles.statusInactive]}>
-                                            <Text style={styles.statusText}>{item.status ? "Ativo" : "Inativo"}</Text>
+                                    return (
+                                        <View key={String(item.id)} style={styles.tableRow}>
+                                            <Text style={[styles.tableCell, { flex: 0.5 }]}>{item.id}</Text>
+                                            <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemUnidade?.nome || item.unidade_id}</Text>
+                                            <Text style={[styles.tableCell, { flex: 1.5 }]}>{itemEscala?.nome || item.escala_id}</Text>
+                                            <Text style={[styles.tableCell, { flex: 1 }]}>{item.mes_ano}</Text>
+                                            <Text style={[styles.tableCell, { flex: 1.5 }]}>{inicioSelecao}</Text>
+                                            <View style={[styles.tableCell, { flex: 0.8 }]}>
+                                                <View style={[styles.statusBadge, item.status ? styles.statusActive : styles.statusInactive]}>
+                                                    <Text style={styles.statusText}>{item.status ? "Ativo" : "Inativo"}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={[{ flex: 1.5, flexDirection: "row", justifyContent: "space-between" }]}>
+                                                <TouchableOpacity style={styles.editButton} onPress={() => loadEditEscalaMes(item.id)}>
+                                                    <Text style={styles.editButtonText}>Editar</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEscalaMes(item.id)}>
+                                                    <Text style={styles.deleteButtonText}>Excluir</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
-                                    </Text>
-                                    <View style={[{ flex: 1.5, flexDirection: "row", justifyContent: "space-between" }]}>
-                                        <TouchableOpacity style={styles.editButton} onPress={() => loadEditEscalaMes(item.id)}>
-                                            <Text style={styles.editButtonText}>Editar</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteEscalaMes(item.id)}>
-                                            <Text style={styles.deleteButtonText}>Excluir</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            );
-                        })
-                    )}
+                                    );
+                                })
+                            )}
+                        </ScrollView>
+                    </View>
                 </ScrollView>
 
                 <TouchableOpacity style={styles.refreshButton} onPress={fetchEscalaMes} disabled={loading}>
