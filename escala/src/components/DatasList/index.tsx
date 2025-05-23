@@ -72,12 +72,11 @@ export default function DatasList({ onDatasChange, initialSelectedDatas = [], se
             if (onDatasChange) {
                 onDatasChange([]);
             }
-
             if (onResetComplete) {
                 onResetComplete();
             }
         }
-    }, [resetList]);
+    }, [resetList, onDatasChange, onResetComplete]);
 
     const renderItem = ({ item }: any) => (
         <TouchableOpacity style={styles.itemContainer} onPress={() => addDataPlantaoList(item)}>
@@ -122,6 +121,18 @@ export default function DatasList({ onDatasChange, initialSelectedDatas = [], se
     );
 
     useEffect(() => {
+        if (resetList) {
+            return;
+        }
+
+        if (initialSelectedDatas) {
+            setDatasPlantaoList(initialSelectedDatas);
+        } else {
+            setDatasPlantaoList([]);
+        }
+    }, [initialSelectedDatas, resetList]);
+
+    useEffect(() => {
         async function fetchDatasPlantao() {
             try {
                 const response = await api.get("/view_escala");
@@ -145,13 +156,6 @@ export default function DatasList({ onDatasChange, initialSelectedDatas = [], se
         setCurrentPage(1);
     }, [selectedTurno, allDatasPlantao]);
 
-    useEffect(() => {
-        if (initialSelectedDatas?.length > 0 && onDatasChange) {
-            setDatasPlantaoList(initialSelectedDatas);
-            onDatasChange(initialSelectedDatas);
-        }
-    }, [initialSelectedDatas]);
-
     return (
         <>
             <View style={styles.container}>
@@ -166,6 +170,7 @@ export default function DatasList({ onDatasChange, initialSelectedDatas = [], se
 
                     <View style={styles.listContainer}>
                         <FlatList
+                            scrollEnabled={false}
                             data={currentItems}
                             keyExtractor={(item) => `${item.data_plantao}-${item.turno}`}
                             renderItem={renderItem}
@@ -203,6 +208,7 @@ export default function DatasList({ onDatasChange, initialSelectedDatas = [], se
                     ) : (
                         <View style={styles.selectedListContainer}>
                             <FlatList
+                                scrollEnabled={false}
                                 data={datasPlantaoList}
                                 keyExtractor={(item) => `${item.data_plantao}-${item.turno}`}
                                 renderItem={renderDatasList}

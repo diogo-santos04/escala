@@ -376,8 +376,14 @@ export default function Plantao() {
                 <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setModalEscalaSetorVisible(true)}>
                     <Text style={{ color: "#000000" }}>{escalaSetorSelected?.nome || "Selecione um setor"}</Text>
                 </TouchableOpacity>
-
-            <DatasList onResetComplete={handleResetDone} onDatasChange={handleDatasPlantaoChange} initialSelectedDatas={datasPlantaoSelecionadas} selectedTurno={escalaTurnoSelected?.nome} resetList={resetList} />
+                
+                <DatasList
+                    onResetComplete={handleResetDone}
+                    onDatasChange={handleDatasPlantaoChange}
+                    initialSelectedDatas={datasPlantaoSelecionadas}
+                    selectedTurno={escalaTurnoSelected?.nome}
+                    resetList={resetList}
+                />
 
                 <Text style={styles.formLabel}>Horas</Text>
                 <TextInput
