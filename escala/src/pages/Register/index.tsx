@@ -5,12 +5,24 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../routes/app.routes";
 import { useContext, useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Alert, KeyboardAvoidingView, Platform, NativeSyntheticEvent, TextInputSubmitEditingEventData } from "react-native";
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    TextInput, 
+    TouchableOpacity, 
+    StatusBar, 
+    Alert, 
+    KeyboardAvoidingView, 
+    Platform, 
+    ScrollView,
+    SafeAreaView,
+    Dimensions
+} from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
 
-// type RootStackParamList = {
-//     Register: undefined;
-// };
+const { height: screenHeight } = Dimensions.get('window');
+
 type RouteDetailParams = {
     Register: {
         id: string;
@@ -39,9 +51,6 @@ interface FormData {
 export default function Register({ navigation }: RegisterScreenProps) {
     const { signIn } = useContext(AuthContext);
     const route = useRoute<OrderRouteProps>();
-    const navigationRegister = useNavigation<NativeStackNavigationProp<StackParamsList>>();
-
-    const servidorId = route.params.id;
 
     const [loading, isLoading] = useState(false);
 
@@ -71,19 +80,13 @@ export default function Register({ navigation }: RegisterScreenProps) {
             const servidorId = route.params.id;
             const user = await api.post("/user", formData);
 
-            console.log("usuario criado", user);
-
             // cria um novo objeto com user_id pra renderizar na hora
             const servidorPayload = {
                 ...formDataServidor,
                 user_id: user.data.data.user.id,
             };
 
-            console.log("payload para o servidor", servidorPayload);
-
             const servidor = await api.put(`servidor/${servidorId}`, servidorPayload);
-
-            console.log("servidor atualizado ", servidor);
 
             if (user) {
                 const email = formData.email;
@@ -119,117 +122,138 @@ export default function Register({ navigation }: RegisterScreenProps) {
     }, []);
 
     return (
-        <View>
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoidingContainer}>
-                <View style={styles.container}>
-                    <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
-                    <Text style={styles.title}>Registro</Text>
+        <SafeAreaView style={styles.safeArea}>
+            <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
+            <KeyboardAvoidingView 
+                behavior={Platform.OS === "ios" ? "padding" : "height"} 
+                style={styles.keyboardContainer}
+            >
+                <ScrollView 
+                    contentContainerStyle={styles.scrollContainer}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View style={styles.container}>
+                        <Text style={styles.title}>Registro</Text>
 
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Nome</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nome"
-                            placeholderTextColor="#999"
-                            value={formData.nome}
-                            onChangeText={(nome: string) => {
-                                setFormData({
-                                    ...formData,
-                                    nome: nome,
-                                });
-                            }}
-                        />
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Nome</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nome"
+                                placeholderTextColor="#999"
+                                value={formData.nome}
+                                onChangeText={(nome: string) => {
+                                    setFormData({
+                                        ...formData,
+                                        nome: nome,
+                                    });
+                                }}
+                            />
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Nome Social</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nome social"
+                                placeholderTextColor="#999"
+                                value={formData.nome_social}
+                                onChangeText={(nome_social: string) => {
+                                    setFormData({
+                                        ...formData,
+                                        nome_social: nome_social,
+                                    });
+                                }}
+                            />
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>CPF</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="CPF"
+                                placeholderTextColor="#999"
+                                value={formData.cpf}
+                                onChangeText={(cpf: string) => {
+                                    setFormData({
+                                        ...formData,
+                                        cpf: cpf,
+                                    });
+                                }}
+                                keyboardType="numeric"
+                            />
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Email</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                placeholderTextColor="#999"
+                                value={formData.email}
+                                onChangeText={(email: string) => {
+                                    setFormData({
+                                        ...formData,
+                                        email: email,
+                                    });
+                                }}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </View>
+
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>Senha</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Senha"
+                                placeholderTextColor="#999"
+                                value={formData.password}
+                                onChangeText={(password: string) => {
+                                    setFormData({
+                                        ...formData,
+                                        password: password,
+                                    });
+                                }}
+                                secureTextEntry
+                            />
+                        </View>
+
+                        <TouchableOpacity 
+                            style={[styles.button, loading && styles.buttonDisabled]} 
+                            onPress={handleRegister} 
+                            disabled={loading}
+                        >
+                            <Text style={styles.buttonText}>
+                                {loading ? "Carregando..." : "Registrar"}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Nome Social</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nome social"
-                            placeholderTextColor="#999"
-                            value={formData.nome_social}
-                            onChangeText={(nome_social: string) => {
-                                setFormData({
-                                    ...formData,
-                                    nome_social: nome_social,
-                                });
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>CPF</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="CPF"
-                            placeholderTextColor="#999"
-                            value={formData.cpf}
-                            onChangeText={(cpf: string) => {
-                                setFormData({
-                                    ...formData,
-                                    cpf: cpf,
-                                });
-                            }}
-                            keyboardType="numeric"
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Email</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email"
-                            placeholderTextColor="#999"
-                            value={formData.email}
-                            onChangeText={(email: string) => {
-                                setFormData({
-                                    ...formData,
-                                    email: email,
-                                });
-                            }}
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>Senha</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Senha"
-                            placeholderTextColor="#999"
-                            value={formData.password}
-                            onChangeText={(password: string) => {
-                                setFormData({
-                                    ...formData,
-                                    password: password,
-                                });
-                            }}//
-                        />
-                    </View>
-
-                    <TouchableOpacity style={[styles.button, loading && { opacity: 0.7 }]} onPress={handleRegister} disabled={loading}>
-                        <Text style={styles.buttonText}>{loading ? "Carregando..." : "Registrar"}</Text>
-                    </TouchableOpacity>
-
-                    {/* {navigation && (
-                      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                        <Text style={styles.backButtonText}>Voltar</Text>
-                      </TouchableOpacity>
-                    )} */}
-                </View>
+                </ScrollView>
             </KeyboardAvoidingView>
-        </View>
+        </SafeAreaView>
     );
 }
+
 const styles = StyleSheet.create({
-    keyboardAvoidingContainer: {
+    safeArea: {
         flex: 1,
+        backgroundColor: "#f5f5f5",
+    },
+    keyboardContainer: {
+        flex: 1,
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        minHeight: screenHeight * 0.9,
     },
     container: {
         flex: 1,
         backgroundColor: "#f5f5f5",
         alignItems: "center",
         justifyContent: "center",
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 40,
     },
     title: {
         fontSize: 28,
@@ -240,7 +264,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: "100%",
-        marginBottom: 20,
+        marginBottom: 16,
     },
     label: {
         fontSize: 16,
@@ -258,6 +282,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ddd",
         width: "100%",
+        minHeight: 48, 
     },
     button: {
         backgroundColor: "#28a745",
@@ -265,8 +290,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 8,
         alignItems: "center",
-        marginTop: 10,
+        justifyContent: "center",
+        marginTop: 20,
         width: "100%",
+        minHeight: 50,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -276,17 +303,12 @@ const styles = StyleSheet.create({
         shadowRadius: 2.62,
         elevation: 4,
     },
+    buttonDisabled: {
+        opacity: 0.7,
+    },
     buttonText: {
         color: "#ffffff",
         fontSize: 18,
         fontWeight: "bold",
     },
-    // backButton: {
-    //   marginTop: 20,
-    //   padding: 10,
-    // },
-    // backButtonText: {
-    //   color: '#007bff',
-    //   fontSize: 16,
-    // },
 });

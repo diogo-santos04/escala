@@ -117,7 +117,11 @@ export default function Plantao() {
     }
 
     function handleDatasPlantaoChange(datas: DatasPlantao[]) {
-        setDatasPlantaoSelecionadas(datas);
+        const datasWithUniqueIds = datas.map((item, index) => ({
+            ...item,
+            uniqueId: `${item.id}-${index}-${Date.now()}`,
+        }));
+        setDatasPlantaoSelecionadas(datasWithUniqueIds);
     }
 
     const [formData, setFormData] = useState<FormData>({
@@ -376,7 +380,7 @@ export default function Plantao() {
                 <TouchableOpacity style={[styles.input, { justifyContent: "center" }]} onPress={() => setModalEscalaSetorVisible(true)}>
                     <Text style={{ color: "#000000" }}>{escalaSetorSelected?.nome || "Selecione um setor"}</Text>
                 </TouchableOpacity>
-                
+
                 <DatasList
                     onResetComplete={handleResetDone}
                     onDatasChange={handleDatasPlantaoChange}

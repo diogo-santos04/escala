@@ -345,54 +345,52 @@ export default function EscalaLimite() {
                         />
                     </View>
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
-                        <View style={{ flex: 1, marginHorizontal: 2 }}>
-                            <Text style={[styles.formLabel, { textAlign: "center" }]}>SEX</Text>
-                            <TextInput
-                                placeholder="0"
-                                placeholderTextColor="#000000"
-                                style={[styles.input, { textAlign: "center" }]}
-                                value={formData.sex.toString()}
-                                keyboardType="numeric"
-                                onChangeText={(text) => handleNumberInput(text, "sex")}
-                            />
-                        </View>
+                    <View style={{ flex: 1, marginHorizontal: 2 }}>
+                        <Text style={[styles.formLabel, { textAlign: "center" }]}>SEX</Text>
+                        <TextInput
+                            placeholder="0"
+                            placeholderTextColor="#000000"
+                            style={[styles.input, { textAlign: "center" }]}
+                            value={formData.sex.toString()}
+                            keyboardType="numeric"
+                            onChangeText={(text) => handleNumberInput(text, "sex")}
+                        />
+                    </View>
 
-                        <View style={{ flex: 1, marginHorizontal: 2 }}>
-                            <Text style={[styles.formLabel, { textAlign: "center" }]}>SAB</Text>
-                            <TextInput
-                                placeholder="0"
-                                placeholderTextColor="#000000"
-                                style={[styles.input, { textAlign: "center" }]}
-                                value={formData.sab.toString()}
-                                keyboardType="numeric"
-                                onChangeText={(text) => handleNumberInput(text, "sab")}
-                            />
-                        </View>
+                    <View style={{ flex: 1, marginHorizontal: 2 }}>
+                        <Text style={[styles.formLabel, { textAlign: "center" }]}>SAB</Text>
+                        <TextInput
+                            placeholder="0"
+                            placeholderTextColor="#000000"
+                            style={[styles.input, { textAlign: "center" }]}
+                            value={formData.sab.toString()}
+                            keyboardType="numeric"
+                            onChangeText={(text) => handleNumberInput(text, "sab")}
+                        />
+                    </View>
 
-                        <View style={{ flex: 1, marginHorizontal: 2 }}>
-                            <Text style={[styles.formLabel, { textAlign: "center" }]}>DOM</Text>
-                            <TextInput
-                                placeholder="0"
-                                placeholderTextColor="#000000"
-                                style={[styles.input, { textAlign: "center" }]}
-                                value={formData.dom.toString()}
-                                keyboardType="numeric"
-                                onChangeText={(text) => handleNumberInput(text, "dom")}
-                            />
-                        </View>
+                    <View style={{ flex: 1, marginHorizontal: 2 }}>
+                        <Text style={[styles.formLabel, { textAlign: "center" }]}>DOM</Text>
+                        <TextInput
+                            placeholder="0"
+                            placeholderTextColor="#000000"
+                            style={[styles.input, { textAlign: "center" }]}
+                            value={formData.dom.toString()}
+                            keyboardType="numeric"
+                            onChangeText={(text) => handleNumberInput(text, "dom")}
+                        />
+                    </View>
 
-                        <View style={{ flex: 1, marginHorizontal: 2 }}>
-                            <Text style={[styles.formLabel, { textAlign: "center" }]}>FER</Text>
-                            <TextInput
-                                placeholder="0"
-                                placeholderTextColor="#000000"
-                                style={[styles.input, { textAlign: "center" }]}
-                                value={formData.feriado.toString()}
-                                keyboardType="numeric"
-                                onChangeText={(text) => handleNumberInput(text, "feriado")}
-                            />
-                        </View>
+                    <View style={{ flex: 1, marginHorizontal: 2 }}>
+                        <Text style={[styles.formLabel, { textAlign: "center" }]}>FER</Text>
+                        <TextInput
+                            placeholder="0"
+                            placeholderTextColor="#000000"
+                            style={[styles.input, { textAlign: "center" }]}
+                            value={formData.feriado.toString()}
+                            keyboardType="numeric"
+                            onChangeText={(text) => handleNumberInput(text, "feriado")}
+                        />
                     </View>
                 </View>
 
@@ -507,7 +505,7 @@ export default function EscalaLimite() {
                                             <>
                                                 <View
                                                     style={{
-                                                        width: 16, 
+                                                        width: 16,
                                                         height: 16,
                                                         borderRadius: 8,
                                                         backgroundColor: itemEscalaTurno.cor,
