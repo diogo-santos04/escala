@@ -136,18 +136,18 @@ export default function Plantao() {
             return;
         }
 
-        setLoading(true);
+        // setLoading(true);
         try {
             const createdPlantoes = [];
             for (const data of datasPlantaoSelecionadas) {
-                const singlePlantao = {
+                const plantao = {
                     ...formData,
                     data_plantao: new Date(data.data_plantao),
                 };
-                const response = await api.post<Plantao>("/plantao", singlePlantao);
+                const response = await api.post<Plantao>("/plantao", plantao);
                 createdPlantoes.push(response.data);
             }
-            console.log("Created plantoes:", createdPlantoes);
+            console.log(createdPlantoes);
 
             // const response = await api.post<Plantao>("/plantao", formData);
             // console.log("Submit response:", response.data);
@@ -242,8 +242,8 @@ export default function Plantao() {
 
         setLoading(true);
         try {
-            console.log("Sending edit data:", formData);
-            console.log("Editing ID:", editingId);
+            // console.log( formData);
+            // console.log(editingId);
 
             const response = await api.put(`/plantao/${editingId}`, formData);
             console.log("edit response:", response.data);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profissional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -14,32 +15,36 @@ class AuthController extends Controller
    // {
    //    $this->middleware("auth:api", ['except' => ['create', 'login']]);
    // }
-
    public function create(Request $request)
    {
       $array = ["error" => ""];
 
-      //valida campos
       $validator = Validator::make($request->all(), [
          'nome' => 'required',
-         'email' => 'required|email',
+         'nome_social' => '',
+         'celular' => 'required',
+         'cpf' => 'required',
+         'email' => 'required',
          'password' => 'required'
       ]);
 
-      //caso validacao NAO tenha dado erro
       if (!$validator->fails()) {
          $nome = $request->input("nome");
+         $nome_social = $request->input("nome_social");
+         $celular = $request->input("celular");
+         $cpf = $request->input("cpf");
          $email = $request->input("email");
          $password = $request->input("password");
 
-         //ver se email existe
          $emailExists = User::where("email", $email)->count();
-         //caso nao existe, cria um novo usuario 
          if ($emailExists === 0) {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $newUser = new User();
 
             $newUser->nome = $nome;
+            $newUser->nome_social = $nome_social;  
+            $newUser->celular = $celular;
+            $newUser->cpf = $cpf;
             $newUser->email = $email;
             $newUser->password = $hash;
 
@@ -58,7 +63,7 @@ class AuthController extends Controller
             $info = auth()->user();
             $array['data'] = [
                'user' => $info,
-               'token' => $token
+               'token'=> $token
             ];
 
          } else {
@@ -99,7 +104,8 @@ class AuthController extends Controller
       return $array;
    }
 
-   public function logout(){
+   public function logout()
+   {
       auth()->logout();
       return response()->json(['success' => true]);
    }

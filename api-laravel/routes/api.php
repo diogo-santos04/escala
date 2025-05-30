@@ -17,15 +17,12 @@ use App\Http\Controllers\Api\PlantaoController;
 use App\Http\Controllers\Api\ViewEscalaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get("/teste", function(){
-    return ['teste' => true];
-});
-
 //ROTAS USUARIO
 Route::post("/auth/login", [AuthController::class, 'login']);
 Route::post("/auth/logout", [AuthController::class, 'logout']);
 Route::post("/auth/refresh", [AuthController::class, 'refresh']);
 Route::post("/user", [AuthController::class, 'create']);
+Route::post("/userProfissional", [AuthController::class, 'createProfissional']);
 Route::get("/user", [UserController::class, 'read']);
 //ROTA UNIDADE
 Route::resource('/unidade', UnidadeController::class);
@@ -33,6 +30,7 @@ Route::resource('/unidade', UnidadeController::class);
 Route::resource('/turno', TurnoController::class);
 //ROTA SERVIDOR
 Route::resource('/servidor', ServidorController::class);
+Route::post('/servidorData', [ServidorController::class, 'servidorData']);
 //ROTA CATEGORIA
 Route::resource('/categoria', CategoriaController::class);
 //ROTA ESCALA

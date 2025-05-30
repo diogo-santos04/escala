@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Servidor extends Model
+class Profissional extends Model
 {
+    protected $table = "profissionais";
+
     protected $fillable = [
-        "nome",
-        "celular",
-        "matricula",
-        "cpf",
-        "email",
-        "codigo",
-        "status",
-        "user_id"
+        'nome',
+        'celular',
+        'cpf',
+        'email',
+        'codigo',
+        'user_id',
     ];
 
     public function user()
